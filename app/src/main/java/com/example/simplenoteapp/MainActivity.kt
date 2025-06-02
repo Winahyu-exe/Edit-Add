@@ -1,35 +1,42 @@
 package com.example.simplenoteapp
 
+
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
-import com.example.simplenoteapp.data.NoteDatabase
-import com.example.simplenoteapp.data.NoteRepository
+import com.example.simplenoteapp.ui.AddEditNoteFragment
 import com.example.simplenoteapp.ui.NoteListFragment
-import com.example.simplenoteapp.viewmodel.NoteViewModel
-import com.example.simplenoteapp.viewmodel.NoteViewModelFactory
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var noteViewModel: NoteViewModel
+    private lateinit var bottomNav: BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
-        val noteDao = NoteDatabase.getDatabase(this).noteDao()
-        val repository = NoteRepository(noteDao)
-        val factory = NoteViewModelFactory(repository)
+        bottomNav = findViewById(R.id.bottom_nav)
 
-        noteViewModel = ViewModelProvider(this, factory)[NoteViewModel::class.java]
-
-        // Cek apakah data berjalan (opsional untuk debug)
-        noteViewModel.allNotes.observe(this) { notes ->
-            Log.d("MainActivity", "Data notes: $notes")
-        }
-
-        supportFragmentManager.beginTransaction()
-            .replace(android.R.id.content, NoteListFragment())
+         supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, NoteListFragment())
             .commit()
+
+        bottomNav.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.menu_list -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, NoteListFragment())
+                        .commit()
+                    true
+                }
+                R.id.menu_add_edit -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, AddEditNoteFragment())
+                        .commit()
+                    true
+                }
+                else -> false
+            }
+        }
     }
 }

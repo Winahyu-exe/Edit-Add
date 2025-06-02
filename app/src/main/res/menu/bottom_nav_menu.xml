@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_list"
+        android:title="Notes List"
+        android:icon="@android:drawable/ic_menu_agenda" />
+    <item
+        android:id="@+id/menu_add_edit"
+        android:title="Add/Edit Note"
+        android:icon="@android:drawable/ic_input_add" />
+</menu>

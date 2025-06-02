@@ -2,11 +2,12 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.kapt")
+
 }
 
 android {
     namespace = "com.example.simplenoteapp"
-    compileSdk = 35
+    compileSdk = 34
 
     viewBinding{
         enable=true

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.simplenoteapp.R
 import com.example.simplenoteapp.data.NoteDatabase
 import com.example.simplenoteapp.data.NoteRepository
 import com.example.simplenoteapp.databinding.FragmentNoteListBinding
@@ -34,7 +35,22 @@ class NoteListFragment : Fragment() {
         val factory = NoteViewModelFactory(repository)
         viewModel = ViewModelProvider(this, factory)[NoteViewModel::class.java]
 
-        adapter = NoteAdapter(emptyList())
+        adapter = NoteAdapter(
+            emptyList(),
+            onItemClick =  { note ->
+            val fragment = AddEditNoteFragment.newInstance(
+                note.id, note.title, note.description
+            )
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .addToBackStack(null)
+                .commit()
+        },
+            onDeleteClick = { note ->
+                viewModel.delete(note)
+            }
+        )
+
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter
 
